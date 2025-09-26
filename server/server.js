@@ -18,7 +18,7 @@ app.get("/",(req,res)=>{
 });
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
-app.use("/videos", videoRoutes);
+app.use("/api/videos", videoRoutes);
 
 const PORT= process.env.PORT||5000;
 app.listen(PORT,()=>console.log(`Server is listening`));

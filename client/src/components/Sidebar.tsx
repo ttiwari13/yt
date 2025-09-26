@@ -1,15 +1,15 @@
 import React from "react";
-import { Book, CheckSquare, Headset, User } from "lucide-react";
-
+import { Book, Headset, User } from "lucide-react";
+import Tasks from "./Tasks";
 interface SidebarProps {
-  onTabChange: React.Dispatch<React.SetStateAction<"library" | "profile">>;
+  onTabChange: React.Dispatch<React.SetStateAction<"library" | "profile" | "tasks">>; 
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onTabChange }) => {
   return (
     <div className="w-64 bg-gray-950 p-6 flex flex-col justify-between min-h-screen">
       <div>
-        <div className="text-xl font-bold mb-8">Kozu</div>
+        <div className="text-xl font-bold mb-8">Kozmic</div>
         <nav className="space-y-4 mb-10">
           <button
             className="flex items-center text-blue-400 font-bold p-3 rounded-lg bg-blue-900 bg-opacity-30 w-full text-left"
@@ -19,10 +19,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onTabChange }) => {
           </button>
           <button
             className="flex items-center text-gray-400 hover:text-white transition-colors p-3 rounded-lg w-full text-left"
+            onClick={() => onTabChange("tasks")} 
           >
-            <CheckSquare className="mr-3" size={20} /> Tasks
+            <Headset className="mr-3" size={20} /> Tasks
           </button>
         </nav>
+
         <div className="border-t border-gray-800 pt-6">
           <h3 className="text-gray-500 text-xs font-semibold uppercase tracking-wider mb-4">
             More
@@ -33,13 +35,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onTabChange }) => {
           >
             <User className="mr-3" size={20} /> My Profile
           </button>
-          <button
-            className="flex items-center text-gray-400 hover:text-white transition-colors p-3 rounded-lg w-full text-left"
-          >
-            <Headset className="mr-3" size={20} /> Contact
-          </button>
         </div>
       </div>
+
       <div className="bg-gray-800 p-4 rounded-lg flex items-center">
         <img
           src="https://via.placeholder.com/40"
