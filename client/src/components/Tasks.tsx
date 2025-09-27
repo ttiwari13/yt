@@ -5,22 +5,36 @@ import { useVideos, type Video } from "../context/videoContext";
 interface TasksProps {
     onSelectVideo: (video: Video) => void;
 }
+const getHiddenVideos = (): Set<string> => {
+    try {
+        const hidden = localStorage.getItem('hiddenVideos');
+        return hidden ? new Set(JSON.parse(hidden)) : new Set();
+    } catch (error) {
+        console.error('Error reading hidden videos from localStorage:', error);
+        return new Set();
+    }
+};
 
 const Tasks: React.FC<TasksProps> = ({ onSelectVideo }) => {
     const { videos } = useVideos();
-    const COMPLETION_THRESHOLD = 1.0; 
-    const inProgress = videos.filter(v => {
-        const progress = v.progress || 0;
-        return progress > 0 && progress < COMPLETION_THRESHOLD;
+    const COMPLETION_THRESHOLD = 1.0;
+    const hiddenVideos = getHiddenVideos();
+    const visibleVideos = videos.filter(video => !hiddenVideos.has(video.id));
+    const inProgress: Video[] = [];
+    const completed: Video[] = [];
+    const notStarted: Video[] = [];
+    visibleVideos.forEach(v => {
+        const progress = v.progress || 0; 
+        
+        if (progress >= COMPLETION_THRESHOLD) {
+            completed.push(v);
+        } else if (progress > 0 && progress < COMPLETION_THRESHOLD) {
+            inProgress.push(v);
+        } else {
+            notStarted.push(v);
+        }
     });
-    const completed = videos.filter(v => {
-        const progress = v.progress || 0;
-        return progress >= COMPLETION_THRESHOLD;
-    });
-    const notStarted = videos.filter(v => {
-        const progress = v.progress || 0;
-        return progress === 0;
-    });
+
     const handleSelectVideo = (video: Video) => {
         onSelectVideo(video);
     };
@@ -34,15 +48,15 @@ const Tasks: React.FC<TasksProps> = ({ onSelectVideo }) => {
             >
                 <div className="font-medium truncate">{v.title}</div>
                 <div className={`text-sm ${color} mt-1`}>
-                    Progress: {Math.floor(v.progress * 100)}% 
+                    Progress: {Math.floor((v.progress || 0) * 100)}% 
                 </div>
                 <div className="text-xs text-gray-500">
-                    Left off at: {v.currentTimestamp} seconds
+                    Left off at: {Math.floor(v.currentTimestamp || 0)} seconds
                 </div>
                 <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
                     <div
                         className={`${border.replace('border-', 'bg-')} h-2 rounded-full`}
-                        style={{ width: `${v.progress * 100}%` }}
+                        style={{ width: `${(v.progress || 0) * 100}%` }}
                     ></div>
                 </div>
             </div>
@@ -56,6 +70,8 @@ const Tasks: React.FC<TasksProps> = ({ onSelectVideo }) => {
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                {/* --- NOT STARTED SECTION --- */}
                 <div>
                     <h3 className="text-xl font-semibold mb-3 text-gray-400 flex items-center">
                         <Clock className="mr-2" size={20} /> Not Started ({notStarted.length})
@@ -68,6 +84,8 @@ const Tasks: React.FC<TasksProps> = ({ onSelectVideo }) => {
                         renderVideoList(notStarted, 'text-gray-400', 'border-gray-500')
                     )}
                 </div>
+
+                {/* --- IN PROGRESS SECTION --- */}
                 <div>
                     <h3 className="text-xl font-semibold mb-3 text-blue-400 flex items-center">
                         <BookOpen className="mr-2" size={20} /> In Progress ({inProgress.length})
@@ -80,6 +98,8 @@ const Tasks: React.FC<TasksProps> = ({ onSelectVideo }) => {
                         renderVideoList(inProgress, 'text-blue-400', 'border-blue-600')
                     )}
                 </div>
+
+                {/* --- COMPLETED SECTION --- */}
                 <div>
                     <h3 className="text-xl font-semibold mb-3 text-green-400 flex items-center">
                         <CheckCircle className="mr-2" size={20} /> Completed ({completed.length})

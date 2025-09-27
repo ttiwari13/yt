@@ -1,6 +1,6 @@
 // src/App.tsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-//import Library from './components/Library';
+import { AuthProvider } from './context/authContext'; 
 import Home from './components/Home';
 import Course from './components/Course';
 function App() {
