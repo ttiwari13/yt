@@ -8,7 +8,6 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* This route handles both videos and playlists */}
         <Route path="/course/:type/:id" element={<Course />} />
       </Routes>
     </Router>

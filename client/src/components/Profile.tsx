@@ -132,7 +132,7 @@ const Profile = () => {
       <div className="bg-gray-800 p-6 rounded-xl text-white shadow-lg">
         {/* Profile Header */}
         <div className="flex items-center mb-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mr-4">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mr-4">
             {userData?.username ? userData.username.charAt(0).toUpperCase() : 'U'}
           </div>
           <div>

@@ -53,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onTabChange }) => {
             <div className="bg-gray-800 p-4 rounded-lg flex items-center">
                 <div
                     className={`flex items-center justify-center rounded-full font-semibold text-white flex-shrink-0 ${
-                        isLoading ? 'animate-pulse bg-gray-600' : 'bg-blue-600'
+                        isLoading ? 'animate-pulse bg-gray-600' : 'bg-blue-500'
                     }`}
                     style={{
                         width: 40,
